@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.hermes.claude-bridge</string>
+
+    <!-- hermes 가 자기 토큰으로 api.anthropic.com 을 부르는 경로를 대체한다.
+         이 서버가 OpenAI 호환 엔드포인트를 세우고 로컬 `claude` 로 실행한다. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/illy/.hermes/hermes-agent/venv/bin/python</string>
+        <string>/Users/illy/.hermes/claude-bridge/server.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/illy/.hermes</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/illy/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin</string>
+        <key>HERMES_HOME</key>
+        <string>/Users/illy/.hermes</string>
+        <!-- 기본 읽기 전용. Telegram 에서 온 문장이 곧바로 로컬 셸이 되면 안 된다.
+             넓히려면 여기에 Edit,Write,Bash 를 더하고 재기동한다. -->
+        <key>CLAUDE_BRIDGE_TOOLS</key>
+        <string>Read,Glob,Grep</string>
+    </dict>
+
+    <key>LimitLoadToSessionType</key>
+    <array>
+        <string>Aqua</string>
+        <string>Background</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+    <key>ExitTimeOut</key>
+    <integer>25</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/illy/.hermes/logs/claude-bridge.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/illy/.hermes/logs/claude-bridge.error.log</string>
+</dict>
+</plist>
