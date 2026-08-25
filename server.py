@@ -43,6 +43,7 @@ import sys
 import threading
 import time
 import uuid
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -214,8 +215,10 @@ def _run_claude(system_prompt: str, user_prompt: str, model: str) -> dict:
     try:
         LOG_DIR.mkdir(parents=True, exist_ok=True)
         with USAGE_LOG.open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps({k: v for k, v in row.items() if k != "text"},
-                                ensure_ascii=False) + "\n")
+            fh.write(json.dumps(
+                {"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                 **{k: v for k, v in row.items() if k != "text"}},
+                ensure_ascii=False) + "\n")
     except OSError:
         pass
     return row
